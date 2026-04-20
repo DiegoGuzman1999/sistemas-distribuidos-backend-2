@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend-inventario:
+    build: .
+    container_name: backend-inventario
+    ports:
+      - "5001:5001"
+    environment:
+      SECRET_KEY: clave-secreta-dev
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: inventario_db
+      DB_USER: admin
+      DB_PASSWORD: admin123
+    networks:
+      - red-inventario
+
+networks:
+  red-inventario:
+    external: true
