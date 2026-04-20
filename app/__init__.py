@@ -1,11 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import os
 
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
     app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-dev')
 
