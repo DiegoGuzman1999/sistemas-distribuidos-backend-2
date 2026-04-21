@@ -24,6 +24,8 @@ def create_app():
     db.init_app(app)
 
     from app.routes import inventario_bp
+    from app.routes_ventas import ventas_bp
     app.register_blueprint(inventario_bp)
+    app.register_blueprint(ventas_bp)
 
     return app
