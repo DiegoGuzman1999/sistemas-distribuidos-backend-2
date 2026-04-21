@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost", "http://127.0.0.1"])
 
     app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-dev')
 
