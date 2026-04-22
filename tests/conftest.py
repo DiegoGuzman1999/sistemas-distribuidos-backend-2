@@ -5,13 +5,15 @@ from app import create_app, db
 
 @pytest.fixture
 def app():
-    application = create_app()
-    application.config['TESTING'] = True
-    application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    application.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'connect_args': {'check_same_thread': False},
-        'poolclass': StaticPool,
-    }
+    application = create_app({
+        'TESTING': True,
+        'SECRET_KEY': 'test-secret',
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+        'SQLALCHEMY_ENGINE_OPTIONS': {
+            'connect_args': {'check_same_thread': False},
+            'poolclass': StaticPool,
+        },
+    })
 
     with application.app_context():
         db.create_all()
