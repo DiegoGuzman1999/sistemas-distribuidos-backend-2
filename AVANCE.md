@@ -37,6 +37,9 @@ sistemas-distribuidos-backend-2/
 | POST   | /productos        | Crea un nuevo producto         |
 | PUT    | /productos/\<id\> | Edita un producto existente    |
 | DELETE | /productos/\<id\> | Elimina un producto            |
+| GET    | /ventas           | Lista el historial de ventas   |
+| POST   | /ventas           | Registra una venta             |
+| GET    | /ventas/reporte   | Resumen y top 5 productos      |
 
 ### Ejemplo de crear producto
 **Request:**
@@ -63,6 +66,7 @@ Este servicio corre en el puerto **5001**.
 
 ## Historial de cambios
 
-| Fecha      | Rama | Descripción                               |
-|------------|------|-------------------------------------------|
-| 2026-04-20 | dev  | Estructura inicial: API Flask de inventario (CRUD) |
+| Fecha | Autor | Rama | Descripción |
+|---|---|---|---|
+| 2026-04-20 | DiegoGuzman1999 | dev | Estructura inicial: API Flask de inventario (CRUD) |
+| 2026-04-21 | Checho999awoo | dev | Agregar endpoints de ventas e histórico |
