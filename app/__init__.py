@@ -5,11 +5,18 @@ import os
 
 db = SQLAlchemy()
 
+
 def create_app(test_config=None):
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost", "http://127.0.0.1"])
+    CORS(app, supports_credentials=True,
+         origins=["http://localhost:3000", "http://127.0.0.1:3000",
+                  "http://localhost", "http://127.0.0.1"])
 
     app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-dev')
+
+    app.config['SESSION_COOKIE_DOMAIN'] = 'localhost'
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = False
 
     if test_config is None:
         db_url = (
@@ -27,9 +34,12 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from app.routes import inventario_bp
-    from app.routes_ventas import ventas_bp
+    from app.routes           import inventario_bp
+    from app.routes_ventas    import ventas_bp
+    from app.routes_auditoria import auditoria_bp
+
     app.register_blueprint(inventario_bp)
     app.register_blueprint(ventas_bp)
+    app.register_blueprint(auditoria_bp)
 
     return app
