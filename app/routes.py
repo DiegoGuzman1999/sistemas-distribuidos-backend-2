@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from app import db
 from app.models import Producto
 
-inventario_bp = Blueprint('inventario', __name__)
+inventario_bp = Blueprint('inventario', __name__, url_prefix='/inv')
 
 @inventario_bp.route('/health', methods=['GET'])
 def health():

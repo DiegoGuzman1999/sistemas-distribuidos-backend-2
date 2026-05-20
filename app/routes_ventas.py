@@ -4,7 +4,7 @@ from app.models import Producto
 from app.models_venta import Venta
 from sqlalchemy import func
 
-ventas_bp = Blueprint('ventas', __name__)
+ventas_bp = Blueprint('ventas', __name__, url_prefix='/inv')
 
 @ventas_bp.route('/ventas', methods=['GET'])
 def listar_ventas():
