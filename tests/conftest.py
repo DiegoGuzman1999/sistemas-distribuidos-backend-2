@@ -1,37 +1,47 @@
 import pytest
-from sqlalchemy.pool import StaticPool
-from app import create_app, db
+from app import create_app, db as _db
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app():
-    application = create_app({
+    test_config = {
         'TESTING': True,
-        'SECRET_KEY': 'test-secret',
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        'SQLALCHEMY_ENGINE_OPTIONS': {
-            'connect_args': {'check_same_thread': False},
-            'poolclass': StaticPool,
-        },
-    })
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+        'SECRET_KEY': 'test-secret',
+    }
+    application = create_app(test_config)
 
     with application.app_context():
-        db.create_all()
+        _db.create_all()
         yield application
-        db.drop_all()
+        _db.drop_all()
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def client(app):
     return app.test_client()
 
 
+@pytest.fixture(autouse=True)
+def limpiar_tablas(app):
+    with app.app_context():
+        from app.models import Producto
+        from app.models_venta import Venta
+        _db.session.query(Venta).delete()
+        _db.session.query(Producto).delete()
+        _db.session.commit()
+    yield
+
+
+# ── Helper: producto de prueba ────────────────────────────────
+
 @pytest.fixture
-def producto_id(client):
-    res = client.post('/productos', json={
-        'nombre': 'Monitor',
-        'descripcion': 'Monitor 24 pulgadas',
-        'cantidad': 10,
-        'precio': 500.0,
-    })
-    return res.get_json()['producto']['id']
+def producto_base(app):
+    with app.app_context():
+        from app.models import Producto
+        p = Producto(nombre='Laptop', descripcion='Portátil de prueba',
+                     cantidad=10, precio=1500.00)
+        _db.session.add(p)
+        _db.session.commit()
+        return p.id   # devuelve solo el id (seguro fuera del contexto)
